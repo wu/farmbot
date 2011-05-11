@@ -1,0 +1,1 @@
+/usr/local/CrossPack-AVR/bin/avr-gcc -I/Applications/Arduino.app/Contents/Resources/Java/hardware/arduino/cores/arduino -Wall -Os -fpack-struct -fshort-enums -funsigned-char -funsigned-bitfields -mmcu=atmega328p -DF_CPU=1000000UL -MMD -MP -MF"main.d" -MT"main.d" -c -o"main.o" "main.c"
