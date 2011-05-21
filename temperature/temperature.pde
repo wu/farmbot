@@ -16,9 +16,11 @@ void setup() {
 }
 
 void loop() {
- Serial.print("Temp: ");
- Serial.print(temp.GetTemperature());
- Serial.println(" degC");
- delay(100);
+ Serial.print( "Temp, " );
+ Serial.print( temp.GetTemperature() * 9 / 5 + 32 );
+ Serial.println( " F" );
+
+ delay(1000);
 }
+
 
