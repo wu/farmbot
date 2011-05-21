@@ -8,6 +8,8 @@ use Device::SerialPort qw( :PARAM :STAT :ALL );
 
 while ( 1 ) {
 
+    my $lasttemp;
+
     eval {
 
         my $port = Device::SerialPort->new("/dev/tty.usbmodem411");
@@ -48,13 +50,18 @@ while ( 1 ) {
             # }
 
             if ( $char ) {
-                # If we get data, then print it Send a number to the arduino
-                my $time = time;
-                print $fh scalar localtime( $time );
-                print $fh ", $time, $char\n";
 
-                print scalar localtime( $time );
-                print ", $time, $char\n";
+                unless ( $char eq $lasttemp ) {
+                    $lasttemp = $char;
+
+                    # If we get data, then print it Send a number to the arduino
+                    my $time = time;
+                    print $fh scalar localtime( $time );
+                    print $fh ", $time, $char\n";
+
+                    print scalar localtime( $time );
+                    print ", $time, $char\n";
+                }
             }
 
             # Uncomment the following lines, for slower reading, but lower CPU
