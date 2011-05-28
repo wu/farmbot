@@ -6,6 +6,10 @@
  *  temp does not change for longer than maxupdate (60 seconds),
  *  refresh the current temperature out to the serial.
  *
+ *  uses LibTemperature2 to read from multiple sensors.
+ *
+ *    http://log.liminastudio.com/programming/how-to-read-a-chain-of-tmp421-temperature-sensors-with-an-arduino
+ *
  *  Tested with the TMP421-Breakout
  *  Temperature Sensor from Modern Device
  *****************************/
