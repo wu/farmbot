@@ -1,76 +1,114 @@
 /*
  * ShiftBrite.pde
+ *
+ * Fade a shiftbrite by cycling the hue
+ *
+ * http://www.easyrgb.com/index.php?X=MATH
+ * http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1207331496
+ *
  */
 
 #include "HughesyShiftBrite.h"
 
 HughesyShiftBrite sb;
 
-int redbrightness = 500;    // how bright the LED is
-int redfadeAmount = 10;    // how many points to fade the LED by
+float h = 0;
+float h_fade = .001;
 
-int bluebrightness = 500;    // how bright the LED is
-int bluefadeAmount = 10;    // how many points to fade the LED by
+int h_int;
+int r=0, g=0, b=0;
 
-int greenbrightness = 500;    // how bright the LED is
-int greenfadeAmount = 10;    // how many points to fade the LED by
+int val=0;
 
-int fade; // code_smell: used for saving loop state
+void h2rgb(float h, int &R, int &G, int &B);
 
 void setup() {
   sb = HughesyShiftBrite(10,11,12,13);
-  sb.sendColour(10,10,10);
+  sb.sendColour(0,0,100);
   Serial.begin(9600);
 }
 
 
 void loop()  {
 
-  redbrightness = get_color( redbrightness, redfadeAmount );
-  redfadeAmount = fade;
+  h += h_fade;
 
-  bluebrightness = get_color( bluebrightness, bluefadeAmount );
-  bluefadeAmount = fade;
+  if ( h > 1 ) {
+    h = 0;
+  }
+  
+  h_int = (int) 360*h;
 
-  greenbrightness = get_color( greenbrightness, greenfadeAmount );
-  greenfadeAmount = fade;
+  h2rgb(h,r,g,b);
 
-  sb.sendColour( redbrightness, greenbrightness, bluebrightness);
+  sb.sendColour( r, g, b);
 
-  Serial.print( redbrightness );
-  Serial.print( ", " );
-  Serial.print( greenbrightness );
-  Serial.print( ", " );
-  Serial.println( bluebrightness );
+  Serial.print( ", h=" );
+  Serial.print( h );
+  Serial.print( ", r=" );
+  Serial.print( r );
+  Serial.print( ", g=" );
+  Serial.print( g );
+  Serial.print( ", b=" );
+  Serial.println( b );
 
-  delay(100);
+  delay( 10 );
+
 }
 
-int get_color( int brightness, int fadeAmount ) {
+void h2rgb(float H, int& R, int& G, int& B) {
 
-  // code_smell - storing state variable within method
-  fade = fadeAmount;
+  int var_i;
+  float S=1, V=1, var_1, var_2, var_3, var_h, var_r, var_g, var_b;
 
-  brightness += fadeAmount;
-
-  if ( brightness < 0 ) {
-    brightness = 0;
-    fade = -fade;
+  if ( S == 0 )                       //HSV values = 0 ÷ 1
+  {
+    R = V * 1000;
+    G = V * 1000;
+    B = V * 1000;
   }
-  else if ( brightness > 999 ) {
-    brightness = 999;
-    fade = -fade;
-  }
-  else {
-    if ( random(100) > 98 ) {
-      if ( fade < 0 ) {
-        fade = -random(20);
-      }
-      else {
-        fade = random(20);
-      }
+  else
+  {
+    var_h = H * 6;
+    if ( var_h == 6 ) var_h = 0;      //H must be < 1
+    var_i = int( var_h ) ;            //Or ... var_i = floor( var_h )
+    var_1 = V * ( 1 - S );
+    var_2 = V * ( 1 - S * ( var_h - var_i ) );
+    var_3 = V * ( 1 - S * ( 1 - ( var_h - var_i ) ) );
+
+    if      ( var_i == 0 ) {
+      var_r = V     ;
+      var_g = var_3 ;
+      var_b = var_1 ;
     }
-  }
+    else if ( var_i == 1 ) {
+      var_r = var_2 ;
+      var_g = V     ;
+      var_b = var_1 ;
+    }
+    else if ( var_i == 2 ) {
+      var_r = var_1 ;
+      var_g = V     ;
+      var_b = var_3 ;
+    }
+    else if ( var_i == 3 ) {
+      var_r = var_1 ;
+      var_g = var_2 ;
+      var_b = V     ;
+    }
+    else if ( var_i == 4 ) {
+      var_r = var_3 ;
+      var_g = var_1 ;
+      var_b = V     ;
+    }
+    else                   {
+      var_r = V     ;
+      var_g = var_1 ;
+      var_b = var_2 ;
+    }
 
-  return brightness;
+    R = (1-var_r) * 999 + 1;                  //RGB results = 0 ÷ 255
+    G = (1-var_g) * 999 + 1;
+    B = (1-var_b) * 999 + 1;
+  }
 }
