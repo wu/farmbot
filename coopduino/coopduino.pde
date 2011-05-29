@@ -10,8 +10,18 @@
 LibTemperature temp = LibTemperature(0);
 LiquidCrystal lcd(8, 9, 5, 4, 3, 2);
 
-int temp_max         = 80;
-int temp_min         = 70;
+int temp_max         = 75;
+int temp_min         = 65;
+
+float lasttemp  = 0;
+float mindiff   = 1;
+float newtemp   = 0;
+int showtemp    = 0;
+
+long elapsed;
+long lastupdate = 0;
+long maxupdate  = 60000;
+
 
 int redpin           = 13;
 int bluepin          = 12;
@@ -75,7 +85,7 @@ void loop() {
   lcd.print(second);
 
   // Light Control
-  if ( hour < 10 ) {
+  if ( hour < 10 || hour > 22 ) {
     light_state = 0;
   }
   else {
@@ -98,27 +108,46 @@ void loop() {
   }
 
   // TEMPERATURE
-  mytemp = temp.GetTemperature()  * 9 / 5 + 32;
+  newtemp = temp.GetTemperature();
 
-  lcd.setCursor(0, 1);
-  lcd.print( "temp: " );
-  lcd.print( mytemp );
-  lcd.print( " F" );
+  elapsed = millis() - lastupdate;
 
-  if ( last_temp != mytemp ) {
-    last_temp = mytemp;
+  float tempchange = abs( lasttemp - newtemp );
+  if ( tempchange > mindiff ) {
+    // temperature changed
+    showtemp = 1;
+  }
+  else if ( elapsed > maxupdate ) {
+    // refresh the display
+    showtemp = 1;
+  }
 
-    Serial.print( "temp, " );
-    Serial.println( mytemp );
+  // display
+  if ( showtemp ) {
+    showtemp = 0;
 
+    float newtempf = newtemp * 9 / 5 + 32;
+    Serial.print( "coop, temp, " );
+    Serial.print(  newtempf );
+    Serial.println( ", F" );
+
+    lcd.setCursor(0, 1);
+    lcd.print( "temp: " );
+    lcd.print( newtempf );
+    lcd.print( " F" );
+
+    lasttemp = newtemp;
+    lastupdate = millis();
+    
     lcd.setCursor(11, 1);
-    if ( mytemp > temp_max ) {
+
+    if ( newtempf > temp_max ) {
       digitalWrite(redpin, HIGH);
       digitalWrite(bluepin,  LOW);
       digitalWrite(greenpin, LOW);
       lcd.print( "high" );
     }
-    else if ( mytemp < temp_min ) {
+    else if ( newtempf < temp_min ) {
       digitalWrite(redpin, LOW);
       digitalWrite(bluepin, HIGH);
       digitalWrite(greenpin, LOW);
@@ -131,6 +160,7 @@ void loop() {
       lcd.print( "ok  " );
     }
   }
+
 
   delay(1000);
 }
