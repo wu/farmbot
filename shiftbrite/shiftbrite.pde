@@ -43,14 +43,14 @@ void loop()  {
 
   sb.sendColour( r, g, b);
 
-  Serial.print( ", h=" );
-  Serial.print( h );
-  Serial.print( ", r=" );
-  Serial.print( r );
-  Serial.print( ", g=" );
-  Serial.print( g );
-  Serial.print( ", b=" );
-  Serial.println( b );
+  /* Serial.print( ", h=" ); */
+  /* Serial.print( h ); */
+  /* Serial.print( ", r=" ); */
+  /* Serial.print( r ); */
+  /* Serial.print( ", g=" ); */
+  /* Serial.print( g ); */
+  /* Serial.print( ", b=" ); */
+  /* Serial.println( b ); */
 
   delay( 10 );
 
