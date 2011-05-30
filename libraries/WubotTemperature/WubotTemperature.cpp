@@ -61,8 +61,6 @@ void WubotTemperature::check_temp()
 
   // display
   if ( showtemp ) {
-    Serial.print( address, HEX );
-    Serial.print( ", " );
     Serial.print( name );
     Serial.print( ", temp, " );
     Serial.print( newtemp * 9 / 5 + 32 );
