@@ -42,7 +42,7 @@ WubotTemperature::WubotTemperature( uint8_t got_address, char name_char[] )
 }
 
 
-void WubotTemperature::get_temp()
+void WubotTemperature::check_temp()
 {
   if ( temp_obj_ptr == NULL ) {
     temp_obj_ptr = &( LibTemperature2( address ) );

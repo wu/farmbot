@@ -20,7 +20,7 @@ void setup() {
 
 void loop() {
 
-  wubottemp.get_temp();
+  wubottemp.check_temp();
 
   delay(1000);
 }
