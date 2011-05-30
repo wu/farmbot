@@ -11,7 +11,8 @@
 #include <WubotTemperature.h>
 #include <LibTemperature2.h>
 
-WubotTemperature wubottemp = WubotTemperature( 0x2A, "test" );
+LibTemperature2 temp1 = LibTemperature2( 0x2A );
+WubotTemperature wubottemp = WubotTemperature( &temp1, "test" );
 
 void setup() {
   Serial.begin(9600);
@@ -24,5 +25,4 @@ void loop() {
 
   delay(1000);
 }
-
 

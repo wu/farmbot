@@ -11,20 +11,20 @@
 //#include "WConstants.h"
 
 #include "Wire.h"
-#include <LibTemperature2.h>
+#include "LibTemperature2.h"
 
 // library interface description
 class WubotTemperature
 {
   // user-accessible "public" interface
   public:
-    WubotTemperature( uint8_t got_address, char name_char[] );
+    WubotTemperature( LibTemperature2* temp_obj, char name_char[] );
     void check_temp();
     char name[32];
 
   // library-accessible "private" interface
   private:
-    LibTemperature2 *temp_obj_ptr;
+    LibTemperature2* temp_obj_ptr;
     uint8_t address;
     float lasttemp;
     float mindiff;

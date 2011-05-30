@@ -26,12 +26,12 @@
 // Constructor /////////////////////////////////////////////////////////////////
 // Function that handles the creation and setup of instances
 
-WubotTemperature::WubotTemperature( uint8_t got_address, char name_char[] )
+WubotTemperature::WubotTemperature( LibTemperature2* temp_obj, char name_char[] )
 {
   // copy name to the 'name' variable
   strcpy( name, name_char );
 
-  address    = got_address;
+  temp_obj_ptr = temp_obj;
 
   lasttemp   = 0;
   mindiff    = 1;
@@ -44,11 +44,7 @@ WubotTemperature::WubotTemperature( uint8_t got_address, char name_char[] )
 
 void WubotTemperature::check_temp()
 {
-  if ( temp_obj_ptr == NULL ) {
-    temp_obj_ptr = &( LibTemperature2( address ) );
-  }
-
-  float newtemp = (*temp_obj_ptr).GetTemperature();
+  float newtemp = temp_obj_ptr->GetTemperature();
 
   elapsed = millis() - lastupdate;
 
@@ -65,6 +61,8 @@ void WubotTemperature::check_temp()
 
   // display
   if ( showtemp ) {
+    Serial.print( address, HEX );
+    Serial.print( ", " );
     Serial.print( name );
     Serial.print( ", temp, " );
     Serial.print( newtemp * 9 / 5 + 32 );
