@@ -72,7 +72,7 @@ void WubotStatusLight::update_status(int status)
   last_status = status;
 
   if ( status == 0 ) {
-    Serial.println( "Status = 0: ok, normal pretty fade mode" );
+    //Serial.println( "Status = 0: ok, normal pretty fade mode" );
     // normal fade mode
 
     redbrightness = redbrightness + redfadeAmount;
@@ -89,7 +89,7 @@ void WubotStatusLight::update_status(int status)
   }
   else if ( status == 1 ) {
     // warning, yellow
-    Serial.println( "Status = 1: warning, yellow" );
+    //Serial.println( "Status = 1: warning, yellow" );
 
     if ( blink_on == 1 ) {
       send_color( 1000, 1000, 0 );
@@ -102,7 +102,7 @@ void WubotStatusLight::update_status(int status)
   }
   else if ( status == 2 ) {
     // error, red
-    Serial.println( "Status = 2: critical, red" );
+    //Serial.println( "Status = 2: critical, red" );
 
     if ( blink_on == 1 ) {
       send_color( 1000, 0, 0 );
@@ -115,7 +115,7 @@ void WubotStatusLight::update_status(int status)
   }
   else {
     // unknown, orange
-    Serial.println( "Status = 3: unknown, orange" );
+    //Serial.println( "Status = 3: unknown, orange" );
 
     if ( blink_on == 1 ) {
       send_color( 1000, 500, 0 );
@@ -172,10 +172,10 @@ void WubotStatusLight::send_color( int red, int green, int blue )
     analogWrite( bluepin, myblue );
       
   }
-    else {
+  else {
 
-      // shiftbrite
-      sb->sendColour( red, green, blue );
-    }
+    // shiftbrite
+    sb->sendColour( red, green, blue );
+  }
 
 }
