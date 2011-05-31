@@ -17,6 +17,7 @@ class WubotStatusLight
 {
   // user-accessible "public" interface
   public:
+    WubotStatusLight( HughesyShiftBrite* sb );
     WubotStatusLight(int,int,int,int);
     void setup(void);
     void update_status(int);
@@ -24,18 +25,26 @@ class WubotStatusLight
 
   // library-accessible "private" interface
   private:
-    HughesyShiftBrite sb;
+    void send_color(int,int,int);
+
+    HughesyShiftBrite *sb;
     int last_status;
 
-    int pin1;
-    int pin2;
-    int pin3;
-    int pin4;
+    int redpin;
+    int greenpin;
+    int bluepin;
+
+    int invert;
 
     int redbrightness;
     int redfadeAmount;
+    int redMin;
+    int redMax;
+
     int bluebrightness;
     int bluefadeAmount;
+    int blueMin;
+    int blueMax;
 
     int blink_on;
 };
