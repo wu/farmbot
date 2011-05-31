@@ -42,7 +42,7 @@ WubotTemperature::WubotTemperature( LibTemperature2* temp_obj, char name_char[] 
 }
 
 
-void WubotTemperature::check_temp()
+float WubotTemperature::check_temp()
 {
   float newtemp = temp_obj_ptr->GetTemperature();
 
@@ -59,11 +59,13 @@ void WubotTemperature::check_temp()
     showtemp = 1;
   }
 
+  float newtempf = newtemp * 9 / 5 + 32;
+
   // display
   if ( showtemp ) {
     Serial.print( name );
     Serial.print( ", temp, " );
-    Serial.print( newtemp * 9 / 5 + 32 );
+    Serial.print( newtempf );
     Serial.println( ", F" );
 
     lasttemp = newtemp;
@@ -71,4 +73,6 @@ void WubotTemperature::check_temp()
     
     showtemp = 0;
   }
+
+  return newtempf;
 }
