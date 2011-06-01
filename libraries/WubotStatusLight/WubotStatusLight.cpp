@@ -36,12 +36,12 @@ void WubotStatusLight::setup( void )
 {
   redbrightness  = 500;    // how bright the LED is
   redfadeAmount  = 10;    // how many points to fade the LED by
-  redMin         = 100;
-  redMax         = 900;
+  redMin         = 50;
+  redMax         = 800;
 
   bluebrightness = 500;    // how bright the LED is
   bluefadeAmount = -10;    // how many points to fade the LED by
-  blueMin        = 100;
+  blueMin        = 50;
   blueMax        = 900;
 
   blink_on = 1;
@@ -76,12 +76,25 @@ void WubotStatusLight::update_status(int status)
     // normal fade mode
 
     redbrightness = redbrightness + redfadeAmount;
-    if (redbrightness < redMin || redbrightness > redMax || random(100) > 95) {
+    if (redbrightness < redMin ) {
+      redfadeAmount = random(10);
+    }
+    else if ( redbrightness > redMax ) {
+      redfadeAmount = -random(10);
+    }
+    else if ( random(100) > 98 ) {
       redfadeAmount = -redfadeAmount;
     }
+
     bluebrightness = bluebrightness + bluefadeAmount;
-    if (bluebrightness < blueMin || bluebrightness > blueMax || random(100) > 95) {
-      bluefadeAmount = -bluefadeAmount ;
+    if (bluebrightness < blueMin ) {
+      bluefadeAmount = random(10);
+    }
+    else if ( bluebrightness > blueMax ) {
+      bluefadeAmount = -random(10);
+    }
+    else if ( random(100) > 98 ) {
+      bluefadeAmount = -bluefadeAmount;
     }
 
     send_color(redbrightness,0,bluebrightness);
