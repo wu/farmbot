@@ -12,18 +12,21 @@
 
 #define DS1307_ADDRESS 0x68
 
-LibTemperature2 temp = LibTemperature2( 0x2A );
-WubotTemperature wubottemp = WubotTemperature( &temp, "coop" );
+LibTemperature2 temp1 = LibTemperature2( 0x2A );
+WubotTemperature wubottemp1 = WubotTemperature( &temp1, "coop" );
 
-WubotStatusLight statuslight = WubotStatusLight( 9, 10, 11, 1 );
+LibTemperature2 temp2 = LibTemperature2( 0x1C );
+WubotTemperature wubottemp2 = WubotTemperature( &temp2, "outside" );
 
-int lcd_flag = 0;
+WubotStatusLight statuslight = WubotStatusLight( 9, 10, 11, 0 );
+
+int lcd_flag = 1;
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
 
 int status;
 
-int temp_max         = 75;
-int temp_min         = 65;
+int temp_max         = 90;
+int temp_min         = 60;
 
 int powerpin         = 12;
 
@@ -119,7 +122,9 @@ void loop() {
     }
 
     // TEMPERATURE
-    float newtempf = wubottemp.check_temp();
+    wubottemp2.check_temp();
+
+    float newtempf = wubottemp1.check_temp();
 
     if ( lcd_flag == 1 ) {
       lcd.setCursor(0, 1);
