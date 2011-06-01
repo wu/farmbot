@@ -16,8 +16,8 @@
 LibTemperature2 temp1 = LibTemperature2( 0x2A );
 WubotTemperature wubottemp = WubotTemperature( &temp1, "lab" );
 
-LibTemperature2 temp2 = LibTemperature2( 0x1C );
-WubotTemperature wubottemp2 = WubotTemperature( &temp2, "outside" );
+//LibTemperature2 temp2 = LibTemperature2( 0x1C );
+//WubotTemperature wubottemp2 = WubotTemperature( &temp2, "outside" );
 
 int loopcounter;
 
@@ -73,7 +73,7 @@ void loop() {
   if ( loopcounter > 100 ) {
     loopcounter = 0;
     wubottemp.check_temp();
-    wubottemp2.check_temp();
+    //wubottemp2.check_temp();
   }
 
   delay(10);
