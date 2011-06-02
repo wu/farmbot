@@ -20,8 +20,8 @@ class WubotStatusLight
     WubotStatusLight( HughesyShiftBrite* sb );
     WubotStatusLight(int,int,int,int);
     void setup(void);
+    void set_scale(int);
     void update_status(int);
-    
 
   // library-accessible "private" interface
   private:
@@ -35,6 +35,9 @@ class WubotStatusLight
     int bluepin;
 
     int invert;
+    int scale;
+
+    int debug;
 
     int redbrightness;
     int redfadeAmount;

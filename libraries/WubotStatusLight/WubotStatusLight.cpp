@@ -24,16 +24,18 @@ WubotStatusLight::WubotStatusLight( HughesyShiftBrite* sb_ptr )
 WubotStatusLight::WubotStatusLight( int pin_1, int pin_2, int pin_3, int invert_flag )
 {
 
-  redpin = pin_1;
+  redpin   = pin_1;
   greenpin = pin_2;
-  bluepin = pin_3;
+  bluepin  = pin_3;
 
-  invert = invert_flag;
+  invert   = invert_flag;
 
 }
 
 void WubotStatusLight::setup( void )
 {
+  debug = 0;
+
   redbrightness  = 500;    // how bright the LED is
   redfadeAmount  = 10;    // how many points to fade the LED by
   redMin         = 50;
@@ -56,24 +58,30 @@ void WubotStatusLight::setup( void )
 
     // we got 4 pins, this is a shiftbrite
 
-
     // initializing
     send_color(0,0,1000);
   }
-
-  
 }
+
+
 
 // Public Methods //////////////////////////////////////////////////////////////
 // Functions available in Wiring sketches, this library, and other libraries
+
+void WubotStatusLight::set_scale( int scale_arg )
+{
+  scale = scale_arg;
+}
 
 void WubotStatusLight::update_status(int status)
 {
   last_status = status;
 
   if ( status == 0 ) {
-    //Serial.println( "Status = 0: ok, normal pretty fade mode" );
     // normal fade mode
+    if ( debug > 0 ) {
+      Serial.println( "Status = 0: ok, normal pretty fade mode" );
+    }
 
     redbrightness = redbrightness + redfadeAmount;
     if (redbrightness < redMin ) {
@@ -102,7 +110,9 @@ void WubotStatusLight::update_status(int status)
   }
   else if ( status == 1 ) {
     // warning, yellow
-    //Serial.println( "Status = 1: warning, yellow" );
+    if ( debug > 0 ) {
+      Serial.println( "Status = 1: warning, yellow" );
+    }
 
     if ( blink_on == 1 ) {
       send_color( 1000, 1000, 0 );
@@ -115,7 +125,9 @@ void WubotStatusLight::update_status(int status)
   }
   else if ( status == 2 ) {
     // error, red
-    //Serial.println( "Status = 2: critical, red" );
+    if ( debug > 0 ) {
+      Serial.println( "Status = 2: critical, red" );
+    }
 
     if ( blink_on == 1 ) {
       send_color( 1000, 0, 0 );
@@ -128,7 +140,9 @@ void WubotStatusLight::update_status(int status)
   }
   else {
     // unknown, orange
-    //Serial.println( "Status = 3: unknown, orange" );
+    if ( debug > 0 ) {
+      Serial.println( "Status = 3: unknown, orange" );
+    }
 
     if ( blink_on == 1 ) {
       send_color( 1000, 500, 0 );
@@ -149,26 +163,25 @@ void WubotStatusLight::send_color( int red, int green, int blue )
   if ( red > 1000 ) {
     red = 1000;
   }
-  else if ( red < 1 ) {
-    red = 1;
-  }
-
   if ( blue > 1000 ) {
     blue = 1000;
   }
-  else if ( blue < 1 ) {
-    blue = 1;
-  }
-
   if ( green > 1000 ) {
     green = 1000;
-  }
-  else if ( green < 1 ) {
-    green = 1;
   }
 
   if ( sb == NULL ) {
     // tri-color LED
+
+    if ( red < 1 ) {
+      red = 1;
+    }
+    if ( blue < 1 ) {
+      blue = 1;
+    }
+    if ( green < 1 ) {
+      green = 1;
+    }
 
     int myred = red / 4 + 1;
     int myblue = blue / 4 + 1;
@@ -180,12 +193,43 @@ void WubotStatusLight::send_color( int red, int green, int blue )
       mygreen = 254 - mygreen;
     }
 
+    if ( scale ) {
+      red   /= scale;
+      blue  /= scale;
+      green /= scale;
+    }
+
     analogWrite( redpin, myred );
     analogWrite( greenpin, mygreen );
     analogWrite( bluepin, myblue );
       
   }
   else {
+
+    if ( red < 1 ) {
+      red = 0;
+    }
+    if ( blue < 1 ) {
+      blue = 0;
+    }
+    if ( green < 1 ) {
+      green = 0;
+    }
+
+    if ( scale ) {
+      red   /= scale;
+      blue  /= scale;
+      green /= scale;
+    }
+
+    if ( debug > 1 ) {
+      Serial.print( "Shiftbrite color: r=" );
+      Serial.print( red );
+      Serial.print( ", g=" );
+      Serial.print( green );
+      Serial.print( ", b=" );
+      Serial.print( blue );
+    }
 
     // shiftbrite
     sb->sendColour( red, green, blue );
