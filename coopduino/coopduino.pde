@@ -45,6 +45,9 @@ void setup() {
     lcd.begin(16, 2);
   }
 
+  // dim the status light
+  statuslight.set_scale(10);  
+
   statuslight.setup();
 
   Serial.begin( 9600 );
