@@ -6,13 +6,19 @@ use warnings;
 use Capture::Tiny;
 use Device::SerialPort qw( :PARAM :STAT :ALL );
 
-while ( 1 ) {
+my @devices = ( "/dev/tty.usbmodem411", "/dev/tty.usbmodem3b11" );
 
-    my $lasttemp;
+my $device;
+for ( @devices ) {
+    $device = $_ if -r;
+}
+
+
+while ( 1 ) {
 
     eval {
 
-        my $port = Device::SerialPort->new("/dev/tty.usbmodem411");
+        my $port = Device::SerialPort->new( $device );
 
         # 19200, 81N on the USB ftdi driver
         $port->baudrate(9600);
@@ -21,13 +27,6 @@ while ( 1 ) {
         $port->stopbits(1);
 
         #$port->write("Whatever you feel like sending");
-
-        my $path = "/Users/wu/logs/temp.log";
-        open(my $fh, ">>", $path)
-            or die "Couldn't open $path for writing: $!\n";
-
-        # disable buffering
-        { my $ofh = select $fh; $| = 1; select $ofh; }
 
         # clear contents of port on startup
         #$port->lookclear;
@@ -51,25 +50,36 @@ while ( 1 ) {
 
             if ( $char ) {
 
-                unless ( $char eq $lasttemp ) {
-                    $lasttemp = $char;
+                my ( $source, $type, $value, $units ) = split/\s*,\s*/, $char;
+                my $time = time;
 
-                    # If we get data, then print it Send a number to the arduino
-                    my $time = time;
-                    print $fh scalar localtime( $time );
-                    print $fh ", $time, $char\n";
+                if ( $source && $type && $value ) {
+
+                    my $path = "/Users/wu/logs/$source-$type.log";
 
                     print scalar localtime( $time );
-                    print ", $time, $char\n";
+                    print ", $path, $time, $source, $type, $value\n";
+
+                    open(my $fh, ">>", $path)
+                        or die "Couldn't open $path for writing: $!\n";
+
+                    # If we get data, then print it Send a number to the arduino
+                    print $fh scalar localtime( $time );
+                    print $fh ", $time, $source, $type, $value\n";
+
+                    close $fh;
+
+                } else {
+                    warn "Error parsing input: $char\n";
+
                 }
+
             }
 
             # Uncomment the following lines, for slower reading, but lower CPU
             # usage, and to avoid buffer overflow due to sleep function.
             sleep (1);
         }
-
-        close $fh or die "Error closing file: $!\n";
 
         1;
     } or do {
