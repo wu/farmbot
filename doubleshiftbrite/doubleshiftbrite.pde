@@ -7,6 +7,8 @@
 
 #include "HughesyShiftBrite.h"
 
+#include "WubotStatusLight.h";
+
 HughesyShiftBrite sb1;
 HughesyShiftBrite sb2;
 
