@@ -52,7 +52,7 @@ void loop()  {
   /* Serial.print( ", b=" ); */
   /* Serial.println( b ); */
 
-  delay( 10 );
+  delay( 100 );
 
 }
 
