@@ -125,9 +125,9 @@ void loop() {
     }
 
     // TEMPERATURE
-    wubottemp2.check_temp();
+    wubottemp2.check();
 
-    float newtempf = wubottemp1.check_temp();
+    float newtempf = wubottemp1.check();
 
     if ( lcd_flag == 1 ) {
       lcd.setCursor(0, 1);
