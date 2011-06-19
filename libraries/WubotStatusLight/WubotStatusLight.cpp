@@ -38,7 +38,7 @@ void WubotStatusLight::setup( void )
 
   redbrightness  = 500;    // how bright the LED is
   redfadeAmount  = 10;    // how many points to fade the LED by
-  redMin         = 50;
+  redMin         = 0;
   redMax         = 800;
 
   bluebrightness = 500;    // how bright the LED is
