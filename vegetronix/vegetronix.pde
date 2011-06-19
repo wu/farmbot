@@ -10,9 +10,14 @@
 #include "HughesyShiftBrite.h"
 #include "WubotStatusLight.h";
 
+#include "WubotSoilMoisture.h";
+
 // use a shiftbrite
 HughesyShiftBrite sb = HughesyShiftBrite( 11, 10, 9, 8 );
 WubotStatusLight statuslight = WubotStatusLight( &sb );
+
+// vegetronix soil moisture
+WubotSoilMoisture vegetronix = WubotSoilMoisture( 0, "test" );
 
 int loopcount = 0;
 
@@ -35,13 +40,12 @@ void loop()  {
 
   if ( loopcount % 100 == 1 ) {
 
-    int moisture = analogRead(0);
-    moisture = moisture * 100 / vegetronix_max;
+    int moisture = vegetronix.check();
 
-    Serial.print( "test, moisture, " );
-    Serial.println( moisture );
-
-    if ( moisture < moisture_min ) {
+    if ( moisture < 0 || moisture > 100 ) {
+      status = 3;
+    }
+    else if ( moisture < moisture_min ) {
       status = 1;
     }
     else {
