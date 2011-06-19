@@ -41,8 +41,7 @@ WubotTemperature::WubotTemperature( LibTemperature2* temp_obj, char name_char[] 
   maxupdate  = 60000;
 }
 
-
-float WubotTemperature::check_temp()
+float WubotTemperature::check()
 {
   float newtemp = temp_obj_ptr->GetTemperature();
 
@@ -75,4 +74,9 @@ float WubotTemperature::check_temp()
   }
 
   return newtempf;
+}
+
+float WubotTemperature::get_lasttemp()
+{
+  return lasttemp;
 }

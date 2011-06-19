@@ -19,8 +19,9 @@ class WubotTemperature
   // user-accessible "public" interface
   public:
     WubotTemperature( LibTemperature2* temp_obj, char name_char[] );
-    float check_temp();
+    float check();
     char name[32];
+    float get_lasttemp();
 
   // library-accessible "private" interface
   private:
