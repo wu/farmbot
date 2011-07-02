@@ -1,9 +1,12 @@
 /*
  * WubotHumidity.h - handle wubot humidity
  *
- *   send humidity reading and any changes to serial output.  if temp
- *   does not change for longer than maxupdate (60 seconds), refresh
- *   the current humidity out to the serial.
+ *   monitor humidity sensor, and send any humidity changes greater
+ *   than 5% to serial output.  if humidity does not change more than
+ *   5% for longer than maxupdate (60 seconds), refresh the current
+ *   humidity out to the serial.
+ *
+ *   tested with: HIH-4030 Breakout from www.sparkfun.com
  *
  */
 
