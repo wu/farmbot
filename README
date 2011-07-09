@@ -1,5 +1,65 @@
 I'm currently learning how to use an arduino in order to automate a
 lot of tasks on the geekfarm.
 
-This is still a work in progress.  Lots more to come...
+* Sensor Libraries:
 
+These libraries monitor sensors such as soil moisture, humidity, and
+temperature, and transmit the readings over the serial port (and
+potentially to an xbee).  The data is transmitted every time the
+sensor output changes beyond a set threshold.  Also the sensor output
+is always sent at least once per minute, to ensure the sensor is still
+online.
+
+  - WubotTemperature - TMP421 temperature sensor
+  - WubotSoilMoisture - vegetronix soil moisture meter
+  - WubotHumidity - HIH-4030 humidity sensor
+
+  
+* WubotStatusLight
+
+Use this library to report a status that will be displayed on a 3
+color LED or a shiftbrite.  'warning' status to display yellow,
+'critical' status to display blinking red, and 'unknown' displays
+orange.  If the status is 'ok', then the light will fade randomly
+between blue and pink.
+
+
+* install.sh
+
+Install the Wubot* libraries on OS X.
+
+
+* Bots
+
+The bots use the various Wubot libraries.
+
+  - coopbot - runs in the chicken coop
+  - growbot - prototype for the gardenbot
+  - labbot - monitor temp in the lab and receive messages from other bots
+  - devbot - my dev board
+
+The bots each have an xbee to transmit the sensor data to the
+coordinator on the labbot.  The labbot is plugged into an old apple
+laptop over USB, which runs wubot, a personal reactive automation tool
+available on github.  The sensor data is forwarded to the primary
+wubot node which stores the sensor data in RRD files and builds a
+bunch of graphs.  For more information, see wubot:
+
+  - http://github.com/wu/wubot
+
+
+* libraries_3rdparty
+
+Third party libraries that are used by farmbot.  Contains an install
+script to install all the 3rd party libraries on OS X.
+
+
+* attic
+
+Contains lots of scripts that I built along the way, including some
+scripts to run some of the sensors directly.
+
+
+* t
+
+Contains some ArduinoUnit unit tests for the Wubot libraries.
