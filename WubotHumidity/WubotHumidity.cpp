@@ -49,7 +49,7 @@ float WubotHumidity::check( float temp )
   float max_voltage = ( 3.27 - ( 0.00372549 * temp ) ) ; // The max voltage value drops down 0.00372549 for each degree F over 32F. The voltage at 32F is 3.27 (corrected for zero precent voltage)
 
   float newhumidity = ( ( ( ( readhumidity / 1023 ) * 5 ) - ZeroPercentVoltage ) / max_voltage ) * 100;
-  
+
   elapsed = millis() - lastupdate;
 
   float humiditychange = abs( lasthumidity - newhumidity );
@@ -68,7 +68,7 @@ float WubotHumidity::check( float temp )
     Serial.print( name );
     Serial.print( ", humidity, " );
     Serial.print( newhumidity );
-    Serial.println( ", F" );
+    Serial.println( ", percent" );
 
     lasthumidity = newhumidity;
     lastupdate = millis();
