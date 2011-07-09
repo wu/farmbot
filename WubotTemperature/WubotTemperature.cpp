@@ -62,6 +62,7 @@ float WubotTemperature::check()
 
   // display
   if ( showtemp ) {
+    Serial.print( "^" );
     Serial.print( name );
     Serial.print( ", temp, " );
     Serial.print( newtempf );

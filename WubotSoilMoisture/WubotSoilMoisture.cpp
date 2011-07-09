@@ -81,10 +81,11 @@ float WubotSoilMoisture::check()
 
   // display
   if ( showvalue ) {
+    Serial.print( "^" );
     Serial.print( name );
     Serial.print( ", moisture, " );
     Serial.print( newvalue );
-    Serial.println( ", %" );
+    Serial.println( ", percent" );
 
     last_value = newvalue;
     lastupdate = millis();

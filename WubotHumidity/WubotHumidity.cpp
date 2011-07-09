@@ -65,6 +65,7 @@ float WubotHumidity::check( float temp )
 
   // display
   if ( showhumidity ) {
+    Serial.print( "^" );
     Serial.print( name );
     Serial.print( ", humidity, " );
     Serial.print( newhumidity );
