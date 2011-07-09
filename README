@@ -7,22 +7,21 @@ These libraries monitor sensors such as soil moisture, humidity, and
 temperature, and transmit the readings over the serial port (and
 potentially to an xbee).  The data is transmitted every time the
 sensor output changes beyond a set threshold.  Also the sensor output
-is always sent at least once per minute, to ensure the sensor is still
-online.
+is always sent at least once per minute.
 
   - WubotTemperature - TMP421 temperature sensor
   - WubotSoilMoisture - vegetronix soil moisture meter
   - WubotHumidity - HIH-4030 humidity sensor
 
-  
 * WubotStatusLight
 
 Use this library to report a status that will be displayed on a 3
-color LED or a shiftbrite.  'warning' status to display yellow,
-'critical' status to display blinking red, and 'unknown' displays
-orange.  If the status is 'ok', then the light will fade randomly
-between blue and pink.
+color LED or a shiftbrite.  Possible states are:
 
+ 0 = ok, fade randomly between blue, purple, and pink
+ 1 = warning, blink yellow
+ 2 = critical, blink red
+ 3 = unknown, blink orange
 
 * install.sh
 
@@ -31,19 +30,20 @@ Install the Wubot* libraries on OS X.
 
 * Bots
 
-The bots use the various Wubot libraries.
+The bots use the various Wubot libraries.  More bots are on the way.
 
-  - coopbot - runs in the chicken coop
-  - growbot - prototype for the gardenbot
-  - labbot - monitor temp in the lab and receive messages from other bots
-  - devbot - my dev board
+  - labbot - runs in the computer lab.  monitor temps and receive messages from other bots
+  - coopbot - runs in the chicken coop. monitor temps, control lights, with an LCD
+  - growbot - runs in the greenhouse.  monitor temp, humidity, soil moisture
+  - devbot - my dev board, cycles through various projects and prototypes
 
 The bots each have an xbee to transmit the sensor data to the
 coordinator on the labbot.  The labbot is plugged into an old apple
-laptop over USB, which runs wubot, a personal reactive automation tool
-available on github.  The sensor data is forwarded to the primary
-wubot node which stores the sensor data in RRD files and builds a
-bunch of graphs.  For more information, see wubot:
+laptop over USB.  The sensor data is read using the SerialPort plugin
+for wubot, a personal reactive automation tool available on github.
+wubot stores the data in RRD files and generates graphs.  It also
+sends me notifications when there are problems, e.g. the soil moisture
+is getting low.  For more information, see wubot:
 
   - http://github.com/wu/wubot
 
