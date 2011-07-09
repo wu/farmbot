@@ -4,8 +4,8 @@
 */
 
 // ensure this library description is only included once
-#ifndef wubot_h
-#define wubot_h
+#ifndef wubottemperature_h
+#define wubottemperature_h
 
 // include types & constants of Wiring core API
 //#include "WConstants.h"
