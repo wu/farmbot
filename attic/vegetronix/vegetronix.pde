@@ -38,7 +38,8 @@ void loop()  {
 
   loopcount++;
 
-  if ( loopcount % 100 == 1 ) {
+  if ( loopcount > 100 ) {
+    loopcount = 0;
 
     int moisture = vegetronix.check();
 

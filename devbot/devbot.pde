@@ -35,7 +35,8 @@ void loop() {
 
   loopcount++;
 
-  if ( loopcount % 100 == 1 ) {
+  if ( loopcount > 100 ) {
+    loopcount = 0;
 
     float temp = wubottemp.check();
 
@@ -43,7 +44,6 @@ void loop() {
     //lcd.print( "lr=" );
     lcd.print( temp );
     Serial.println( temp );
-  
   }
 
   statuslight.update_status( 0 );
