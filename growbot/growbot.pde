@@ -35,5 +35,8 @@ void loop() {
   
   vegetronix.check();
 
-  delay(1000);
+  // data is only read from the serial port every 5 seconds, so don't
+  // bother getting a reading more often than that
+  delay(5000);
+
 }
