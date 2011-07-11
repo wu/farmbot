@@ -37,7 +37,7 @@ int loopcount;
 int status;
 
 void setup() {
-  lcd.begin(0, 0);
+  lcd.begin( 16, 2 );
   statuslight.setup();
 
   Serial.begin( 9600 );
@@ -48,7 +48,8 @@ void loop() {
 
   loopcount++;
 
-  if ( loopcount % 10 == 1 ) {
+  if ( loopcount > 10 ) {
+    loopcount = 0;
 
     float temp = wubottemp.check();
 
@@ -62,11 +63,10 @@ void loop() {
       status = 0;
     }
 
-    lcd.setCursor(0, 1);
+    lcd.setCursor( 0, 0 );
     lcd.print( "temp: " );
     lcd.print( temp );
     lcd.print( " F" );
-  
   }
 
   statuslight.update_status( status );
