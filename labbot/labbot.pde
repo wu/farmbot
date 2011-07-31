@@ -72,8 +72,8 @@ void loop() {
   // temperature
   if ( loopcounter > 100 ) {
     loopcounter = 0;
-    wubottemp.check_temp();
-    //wubottemp2.check_temp();
+    wubottemp.check();
+    //wubottemp2.check();
   }
 
   delay(10);
