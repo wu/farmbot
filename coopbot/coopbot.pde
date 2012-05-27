@@ -57,12 +57,15 @@ void setup() {
 
 void loop() {
 
+  //Serial.println( "DEBUG: Loop" );
   loop_counter++;
 
   if ( loop_counter > 10 ) {
+    //Serial.println( "DEBUG: Loop Internal" );
     loop_counter = 0;
 
     // TIME
+    //Serial.println( "DEBUG: getting time" );
     Wire.beginTransmission(DS1307_ADDRESS);
     Wire.send(0);
     Wire.endTransmission();
@@ -76,6 +79,7 @@ void loop() {
     int month = bcdToDec(Wire.receive());
     int year = bcdToDec(Wire.receive());
 
+    //Serial.println( "DEBUG: updating LCD" );
     if ( lcd_flag == 1 ) {
       lcd.setCursor(0, 0);
       if ( hour < 10 ) {
@@ -94,8 +98,9 @@ void loop() {
       lcd.print(second);
     }
 
-    // Light Control
-    if ( hour < 10 || hour > 22 ) {
+    //Serial.println( "DEBUG: controlling light" );
+    // Light Control, 12 hours per day
+    if ( hour < 8 || hour > 20 ) {
       light_state = 0;
     }
     else {
@@ -125,39 +130,46 @@ void loop() {
     }
 
     // TEMPERATURE
-    wubottemp2.check();
 
-    float newtempf = wubottemp1.check();
-
+    //Serial.println( "DEBUG: reading temp1" );
+    float newtemp1f = wubottemp1.check();
     if ( lcd_flag == 1 ) {
       lcd.setCursor(0, 1);
-      lcd.print( "temp: " );
-      lcd.print( newtempf );
-      lcd.print( " F" );
-
-      lcd.setCursor(11, 1);
+      lcd.print( newtemp1f );
+      lcd.print( " I " );
     }
 
-    if ( newtempf > temp_max ) {
-      status = 1;
-      if ( lcd_flag == 1 ) {
-        lcd.print( "high" );
-      }
+    //Serial.println( "DEBUG: reading temp2" );
+    float newtemp2f = wubottemp2.check();
+    if ( lcd_flag == 1 ) {
+      lcd.setCursor(9, 1);
+      lcd.print( newtemp2f );
+      lcd.print( " O " );
     }
-    else if ( newtempf < temp_min ) {
-      status = 2;
-      if ( lcd_flag == 1 ) {
-        lcd.print( "low " );
-      }
-    }
-    else {
-      status = 0;
-      if ( lcd_flag == 1 ) {
-        lcd.print( "ok  " );
-      }
-    }
+
+    /* if ( newtempf > temp_max ) { */
+    /*   status = 1; */
+    /*   if ( lcd_flag == 1 ) { */
+    /*     lcd.print( "high" ); */
+    /*   } */
+    /* } */
+    /* else if ( newtempf < temp_min ) { */
+    /*   status = 2; */
+    /*   if ( lcd_flag == 1 ) { */
+    /*     lcd.print( "low " ); */
+    /*   } */
+    /* } */
+    /* else { */
+    /*   status = 0; */
+    /*   if ( lcd_flag == 1 ) { */
+    /*     lcd.print( "ok  " ); */
+    /*   } */
+    /* } */
+
+    //Serial.println( "DEBUG: done with loop" );
   }
 
+  //Serial.println( "DEBUG: updating status light" );
   statuslight.update_status( status );
 
   delay(100);

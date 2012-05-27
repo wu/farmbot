@@ -63,7 +63,7 @@ void loop() {
   int year     = bcdToDec(Wire.receive());
 
   // Light Control
-  if ( hour > 2 && hour < 8 ) {
+  if ( hour >= 0 && hour < 12 ) {
     light_state = 0;
   }
   else {

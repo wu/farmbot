@@ -1,53 +1,39 @@
-/*
- *
- */
-
 #include "Wire.h"
-#include <LiquidCrystal.h>
 
-#include <WubotTemperature.h>
-#include <LibTemperature2.h>
+int serIn;
 
-#include "HughesyShiftBrite.h"
-#include "WubotStatusLight.h";
+int place = 0;
+char Str[80];
 
-LibTemperature2 temp1 = LibTemperature2( 0x2A );
-WubotTemperature wubottemp = WubotTemperature( &temp1, "livingroom" );
-
-HughesyShiftBrite sb = HughesyShiftBrite( 11, 10, 9, 8 );
-WubotStatusLight statuslight = WubotStatusLight( &sb );
-
-LiquidCrystal lcd(7, 6, 2, 3, 4, 5 );
-
-int loopcount;
 
 void setup() {
-  lcd.begin(0, 0);
-  statuslight.setup();
-
-  Serial.begin( 9600 );
-  Serial.println( "Devduino Initialized" );
+  Serial.begin(9600);
 }
 
 void loop() {
 
-  Serial.println( "Looping..." );
+  while (Serial.available() > 0) {
 
-  loopcount++;
+    serIn = Serial.read();
 
-  if ( loopcount > 100 ) {
-    loopcount = 0;
+    if ( serIn == 10 ) {
+      Serial.print( "GOT: " );
 
-    float temp = wubottemp.check();
+      for ( int i = 0; i < place; i++ ) {
+        Serial.print( Str[i] );
+      }
+      Serial.println();
+      place = 0;
 
-    lcd.setCursor(0, 1);
-    //lcd.print( "lr=" );
-    lcd.print( temp );
-    Serial.println( temp );
+    }
+    else {
+      Str[ place ] = serIn;
+      place++;
+    }
+  
+    delay(10);
   }
 
-  statuslight.update_status( 0 );
-
-  delay(10);
 }
+
 
