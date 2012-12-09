@@ -25,9 +25,10 @@ WubotHumidity wubothumidity = WubotHumidity( 1, "growbot" );
 #define DS1307_ADDRESS 0x68
 
 // powertail switch
-int powerpin         = 12;
-int light_state      = 0;
-int last_light_state = 2;
+int powerpin          = 12;
+// heater state defaults to 'off'
+int heater_state      = 0;
+int last_heater_state = 0;
 
 // setup
 void setup() {
@@ -62,18 +63,21 @@ void loop() {
   int month    = bcdToDec(Wire.receive());
   int year     = bcdToDec(Wire.receive());
 
-  // Light Control
-  if ( hour >= 0 && hour < 12 ) {
-    light_state = 0;
+  /*********************************/
+  // Heater Control
+  if ( temp < 76 ) {
+    // heater comes on when temp falls below this temp
+    heater_state = 1;
   }
-  else {
-    light_state = 1;
+  else if ( temp > 80 ) {
+    // heater goes when temp gets up above this temp
+    heater_state = 0;
   }
 
-  if ( light_state != last_light_state ) {
-    last_light_state = light_state;
+  if ( heater_state != last_heater_state ) {
+    last_heater_state = heater_state;
 
-    if ( light_state == 0 ) {
+    if ( heater_state == 0 ) {
       digitalWrite( powerpin, LOW );
       Serial.println( "Turning power off" );
     }
